@@ -25,3 +25,12 @@ Tādējādi izstrādājot darbu, studentu komandai ir jāizpilda šādi soļi:
 5. jāsagatavo atskaite par izstrādāto spēli un tā ir jāiesniedz e-studiju kursā;
 6. jāpiesakās aizstāvēšanas laikam;
 7. jāaizstāv izstrādātais darbs.
+
+###########################################################################################################
+
+![image](https://github.com/vladislavsIvanovs13/Numeric-Game/assets/124610956/c96e38f9-a47d-4d82-8f42-8700d3d1e5fa)
+
+###########################################################################################################
+
+No 'Praktisko darbu izpildes organizācija un vadlīnijas'
+https://estudijas.rtu.lv/course/view.php?id=361246&section=9
