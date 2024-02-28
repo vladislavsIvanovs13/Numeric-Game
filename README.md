@@ -11,10 +11,10 @@ Programmatūrā ir jānodrošina šādas iespējas lietotājam:
 
 Izstrādājot programmatūru, studentu komandai obligāti ir jārealizē:
 
-spēles koka vai tā daļas ģenerēšana atkarībā no spēles sarežģītības un studentu komandai pieejamiem skaitļošanas resursiem;
-heiristiskā novērtējuma funkcijas izstrāde;
-Minimaksa algoritms un Alfa-beta algoritms (kas abi var būt realizēti kā Pārlūkošana uz priekšu pār n-gājieniem);
-10 eksperimenti ar katru no algoritmiem, fiksējot datora un cilvēka uzvaru skaitu, datora apmeklēto virsotņu skaitu, datora vidējo laiku gājiena izpildei.
+- spēles koka vai tā daļas ģenerēšana atkarībā no spēles sarežģītības un studentu komandai pieejamiem skaitļošanas resursiem;
+- heiristiskā novērtējuma funkcijas izstrāde;
+- Minimaksa algoritms un Alfa-beta algoritms (kas abi var būt realizēti kā Pārlūkošana uz priekšu pār n-gājieniem);
+- 10 eksperimenti ar katru no algoritmiem, fiksējot datora un cilvēka uzvaru skaitu, datora apmeklēto virsotņu skaitu, datora vidējo laiku gājiena izpildei.
 
 Tādējādi izstrādājot darbu, studentu komandai ir jāizpilda šādi soļi:
 
