@@ -1,25 +1,33 @@
-# This will be the main file that runs our application.
-
 from tkinter import *
-from tkinter import filedialog
-from tkinter import messagebox
-from PIL import Image, ImageTk
+import tkinter as tk
 from tkinter import Canvas
-from numpy import asarray
-import numpy as np
-import random
+from string_generator import Generator
 
-window = Tk()
-window.title("Numeric Game")
-window.geometry("1200x800")
-window.config(background="MediumSeaGreen")
-window.maxsize(1200, 800)
+class Main:
+    def __init__(self, window):
+        self.window = window
+        self.window.title("Numeric Game")
+        self.button = Button(window, text="Generate string", height=2, width=15,
+                             command=self.display_string)
+        self.button.place(x=180, y=510)
+        self.canvas = Canvas(window, width=1000, height=300)
+        self.canvas.configure(bg="MediumAquamarine")
+        self.canvas.place(x=100, y=200)
 
-def create_canvas():
-    canvas1 = Canvas(window, width=1000, height=300)
-    canvas1.configure(bg="MediumAquamarine")
-    canvas1.place(x=100, y=200)
+    def display_string(self):
+        string = Generator.generate_string(25)
+        for number in string:
+            print(number, end='')
+        text = Text(window, bg="MediumAquamarine", height=1, width=37, font=('Times New Roman',25))
+        text.insert(tk.END, string)
+        text.place(x=280,y=340)
+        
+if __name__ == "__main__":
+    window = Tk()
+    window.geometry("1200x800")
+    window.config(background="MediumSeaGreen")
+    window.maxsize(1200, 800)
+    Main(window)
+    window.mainloop()
 
-create_canvas()
-
-window.mainloop()
+    
