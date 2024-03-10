@@ -1,130 +1,104 @@
 #Aizgūts no studiju kursa materiāliem:
 # https://estudijas.rtu.lv/mod/resource/view.php?id=4161716
+from string_generator import MAX_NUMBER
 
-#Klase, kas atbilst vienai virsotnei spēles kokā
-class Virsotne:
-    
-    #Klases konstruktors, kas izveido virsotnes eksemplāru
-    #Katrā virsotnes eksmeplārā glabājas virsotnes unikāls identifikators (id), skaitliskā virkne (virkne)
-    #pirmā spēlētāja punkti (p1), otrā spēlētāja punkti(p2), un virsotnes atrašanās līmeņa numurs
-    #Glabātie dati tiek padoti kā konstruktora argumenti
-    def __init__(self, id, virkne, p1, p2, limenis):
-        self.id=id
-        self.virkne=virkne
-        self.p1=p1
-        self.p2=p2
-        self.limenis=limenis
-               
-#Klase, kas atbilst spēles kokam        
-class Speles_koks:
-    
-    #Klases konstruktors, kas izveido spēles koka eksemplāru
-    #Spēles koka eksemplārs ietver sevī virsotņu kopu, kas tiek veidota kā Python saraksts un
-    #loku kopu, kas tiek veidota kā Python vārdnīca (dictionary)
-    #Gan virsotņu kopa, gan loku kopa sākotnējie ir tukšas
-    #Virsotņu kopā glabāsies virsotnes viena aiz otras
-    #Loku kopā glabāsies virsotnes unikāls identifikators kā vārdnīcas atslēga (key) un
-    #ar konkrētu virsotni citu saistītu virsotņu unikālie identifikatori kā vērtības (values)
+POINT = 1
+BIG_NUMBERS = {7, 8, 9, 10, 11, 12}
+ 
+class Node:
+    def __init__(self, id, string, p1, p2, level):
+        self.id = id
+        self.string = string
+        self.p1 = p1
+        self.p2 = p2
+        self.level = level
+        
+class Tree:
     def __init__(self):
-        self.virsotnu_kopa=[]
-        self.loku_kopa=dict()
+        self.nodes = []
+        self.edges = dict()
     
-    #Klases Speles_koks metode, kas pievieno spēles kokam jaunu virsotni, kuru saņem kā argumentu
-    def pievienot_virsotni(self, Virsotne):
-        self.virsotnu_kopa.append(Virsotne)
+    def add_node(self, Node):
+        self.nodes.append(Node)
         
-    #Klases Speles_koks metode, kura papildina loku kopu, saņemot kā argumentus
-    #virsotnes identifikatoru, no kuras loks iziet, un virsotnes identifikatoru, kurā loks ieiet
-    def pievienot_loku(self, sakumvirsotne_id, beiguvirsotne_id):
-        self.loku_kopa[sakumvirsotne_id]=self.loku_kopa.get(sakumvirsotne_id,[])+[beiguvirsotne_id]
-
-
-#Funkcija, kas atbilstoši veiktajam gājienam iegūst jaunu spēles koka virsotni un
-#papildina speles koka virsotņu kopu un loku kopu
-#Funkcija kā argumentus saņem veiktā gājiena tipu, sarakstu ar jau iepriekš saģenerētajām virsotnēm, kuras apskata 
-#vienu pēc otras, un pašreiz apskatāmo virsotni
+    def add_edge(self, start_id, end_id):
+        self.edges[start_id] = self.edges.get(start_id, []) + [end_id]
         
-#Šī funkcija ir jāmaina!
-def gajiena_parbaude (gajiena_tips,generetas_virsotnes,pasreizeja_virsotne):
-    if gajiena_tips=='1':
-        skaitlis='1'
-    else:
-        skaitlis='2'
-    if skaitlis in pasreizeja_virsotne[1]:
+def check_step(step_type, generated_nodes, current_node, ptr):
         global j
-        id_new='A'+str(j)
-        j+=1
-        mainita_virkne=pasreizeja_virsotne[1]
-        pozicija=mainita_virkne.find(skaitlis)
-        if (pozicija==0):
-            if (gajiena_tips=='1'):
-                mainita_virkne=mainita_virkne[1:]
+        id_new = 'A' + str(j)
+        string_new = current_node[1]
+        
+        if (step_type == '2') and (len(string_new) % 2 == 1) \
+                and (len(string_new) > 1):
+            string_new = string_new[:-1]
+            
+        elif (step_type == '1'):
+            sum = int(string_new[ptr:ptr+1]) + \
+                  int(string_new[ptr+1:ptr+2])
+            
+            if sum in BIG_NUMBERS:
+                sum -= MAX_NUMBER
+                
+            string_new = string_new[:ptr] + str(sum) \
+                        + string_new[ptr+2:]
+            
+        else: return
+        
+        j += 1
+        if (current_node[4] % 2 == 0):
+            p1_new = current_node[2]
+            if (step_type == '1'):
+                p2_new = current_node[3] + POINT
             else:
-                if (gajiena_tips=='2'):
-                    if (len(mainita_virkne)>1):
-                        mainita_virkne=mainita_virkne[1:]
-                    else:
-                        mainita_virkne=mainita_virkne.replace("2","")
-                else:
-                    mainita_virkne='11'+mainita_virkne[1:]  
+                p2_new = current_node[3] - POINT
         else:
-            if (gajiena_tips=='1') or (gajiena_tips=='2'):
-                mainita_virkne=mainita_virkne[:pozicija]+mainita_virkne[pozicija+1:]
+            p2_new = current_node[3]
+            if (step_type == '1'):
+                p1_new = current_node[2] + POINT
             else:
-                mainita_virkne=mainita_virkne[:pozicija]+'11'+mainita_virkne[pozicija+1:]
-        if (gajiena_tips=='1') or (gajiena_tips=='2'):
-            if (pasreizeja_virsotne[4] % 2) == 0:
-                p1_new=pasreizeja_virsotne[2]
-                p2_new=pasreizeja_virsotne[3]+int(gajiena_tips)
+                p1_new = current_node[2] - POINT
+        
+        level_new = current_node[4] + 1
+        node_new = Node(id_new, string_new, p1_new, p2_new, level_new)
+        
+        checked = False
+        i = 0
+        while (not checked) and (i <= len(game_tree.nodes) - 1):
+            if (game_tree.nodes[i].string == node_new.string) \
+                and (game_tree.nodes[i].p1 == node_new.p1) \
+                and (game_tree.nodes[i].p2 == node_new.p2) \
+                and (game_tree.nodes[i].level == node_new.level):
+                checked = True
             else:
-                p1_new=pasreizeja_virsotne[2]+int(gajiena_tips)
-                p2_new=pasreizeja_virsotne[3]  
+                i += 1
+        if not checked:
+            game_tree.add_node(node_new)
+            generated_nodes.append([id_new, string_new, p1_new, p2_new, level_new])
+            game_tree.add_edge(current_node[0], id_new)
         else:
-            p1_new=pasreizeja_virsotne[2]
-            p2_new=pasreizeja_virsotne[3] 
-        limenis_new=pasreizeja_virsotne[4]+1;
-        jauna_virsotne=Virsotne(id_new, mainita_virkne, p1_new, p2_new, limenis_new)
-        parbaude=False
-        i=0
-        while (not parbaude) and (i<=len(sp.virsotnu_kopa)-1):
-            if (sp.virsotnu_kopa[i].virkne==jauna_virsotne.virkne) and (sp.virsotnu_kopa[i].p1==jauna_virsotne.p1) and (sp.virsotnu_kopa[i].p2==jauna_virsotne.p2) and (sp.virsotnu_kopa[i].limenis==jauna_virsotne.limenis):
-                parbaude=True
-            else:
-                i+=1   
-        if not parbaude:
-            sp.pievienot_virsotni(jauna_virsotne)
-            generetas_virsotnes.append([id_new, mainita_virkne, p1_new, p2_new, limenis_new])
-            sp.pievienot_loku(pasreizeja_virsotne[0],id_new)
-        else:
-            j-=1
-            sp.pievienot_loku(pasreizeja_virsotne[0],sp.virsotnu_kopa[i].id)
+            j -= 1
+            game_tree.add_edge(current_node[0], game_tree.nodes[i].id)
      
-#tiek izsaukts spēles koka konstruktors, lai izveidotu tukšu koku        
-sp=Speles_koks()
-#tiek izveidots tukšs ģenerēto virsotņu saraksts
-generetas_virsotnes=[]
-#tiek izveidota sākumvirsotne spēles kokā
-sp.pievienot_virsotni(Virsotne('A1', '1112', 0, 0, 1))
-#tiek pievienota pirmā virsotne ģenerēto virsotņu sarakstam
-generetas_virsotnes.append(['A1', '1112', 0, 0, 1])
-#mainīgais, kurš skaita virsotnes
-j=2
-#kamēr nav apskatītas visas saģenerētas virsotnes viena pēc otras
-while len(generetas_virsotnes)>0:
-    #par pašreiz apskatāmo virsotni kļūst pirmā virsotne saģenerēto virsotņu sarakstā
-    pasreizeja_virsotne=generetas_virsotnes[0]
-    #tiek pārbaudīts gājiens, kad spēlētājs paņem sev vieninieku
-    gajiena_parbaude('1',generetas_virsotnes,pasreizeja_virsotne)
-    #tiek pārbaudīts gājiens, kad spēlētājs paņem sev divnieku
-    gajiena_parbaude('2',generetas_virsotnes,pasreizeja_virsotne)
-    #tiek pārbaudīts gājiens, kad spēlētājs sadala divnieku
-    gajiena_parbaude('3',generetas_virsotnes,pasreizeja_virsotne)
-    #kad visi gājieni no pašreiz apskatāmās virsotnes ir apskatīti, šo virsotni dzēš no ģenerēto virsotņu saraksta
-    generetas_virsotnes.pop(0)
+game_tree = Tree()
+generated_nodes = []
+game_tree.add_node(Node('A1', '16324', 0, 0, 1))
+# 16324 should be replaced with the generated string
+# from string_generator class
+generated_nodes.append(['A1', '16324', 0, 0, 1])
 
-#ciklam beidzoties, tiek izvadīta spēles koka virsotņu kopa
-for x in sp.virsotnu_kopa:
-    print(x.id,x.virkne,x.p1,x.p2,x.limenis)
-#ciklam beidzoties, tiek izvadīta spēles koka loku kopa
-for x, y in sp.loku_kopa.items():
+j = 2
+while len(generated_nodes) > 0:
+    current_node = generated_nodes[0]
+    ptr = 0
+    while ptr < len(current_node[1]) - 1:
+        check_step('1', generated_nodes, current_node, ptr)
+        ptr += 2
+    check_step('2', generated_nodes, current_node, ptr)
+    generated_nodes.pop(0)
+
+for x in game_tree.nodes:
+    print(x.id,x.string,x.p1,x.p2,x.level)
+
+for x, y in game_tree.edges.items():
     print(x, y)
