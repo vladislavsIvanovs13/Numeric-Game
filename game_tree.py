@@ -6,12 +6,13 @@ POINT = 1
 BIG_NUMBERS = {7, 8, 9, 10, 11, 12}
  
 class Node:
-    def __init__(self, id, string, p1, p2, level):
+    def __init__(self, id, string, p1, p2, level, heu=0):
         self.id = id
         self.string = string
         self.p1 = p1
         self.p2 = p2
         self.level = level
+        self.heu = heu
         
 class Tree:
     def __init__(self):
@@ -82,10 +83,10 @@ def check_step(step_type, generated_nodes, current_node, ptr):
      
 game_tree = Tree()
 generated_nodes = []
-game_tree.add_node(Node('A1', '16324', 0, 0, 1))
+game_tree.add_node(Node('A1', '1632416324', 0, 0, 1))
 # 16324 should be replaced with the generated string
 # from string_generator class
-generated_nodes.append(['A1', '16324', 0, 0, 1])
+generated_nodes.append(['A1', '1632416324', 0, 0, 1])
 
 j = 2
 while len(generated_nodes) > 0:
@@ -98,7 +99,7 @@ while len(generated_nodes) > 0:
     generated_nodes.pop(0)
 
 for x in game_tree.nodes:
-    print(x.id,x.string,x.p1,x.p2,x.level)
+    print(x.id,x.string,x.p1,x.p2,x.level,x.heu)
 
 for x, y in game_tree.edges.items():
     print(x, y)
