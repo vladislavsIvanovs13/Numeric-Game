@@ -97,12 +97,10 @@ class GameTree:
         game_tree = Tree()
         generated_nodes = []
         game_tree.add_node(Node('A1', root_node, 0, 0, 1))
-        # 16324 should be replaced with the generated string
-        # from string_generator class
         generated_nodes.append(Node('A1', root_node, 0, 0, 1))
 
         j = 2
-        while (len(generated_nodes) > 0) and (generated_nodes[0].level <= DEPTH):
+        while (len(generated_nodes) > 0) and (generated_nodes[0].level < DEPTH):
             current_node = generated_nodes[0]
             ptr = 0
             while ptr < len(current_node.string) - 1:
@@ -120,3 +118,5 @@ class GameTree:
         return [game_tree.nodes, game_tree.edges] 
             
 GameTree.construct_tree('16324')
+# 16324 should be replaced with the generated string
+# from string_generator class
