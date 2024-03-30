@@ -1,7 +1,7 @@
 # visa funkcija aizgūta no https://pastebin.com/rZg1Mz9G pseidokoda.
 
 def alphabeta(pos, depth, alpha, beta, max):
-    if depth == 0:  # or game over
+    if depth == 0 or gameover(pos):  # or game over
         return pos
     
     if max == True:
@@ -17,3 +17,7 @@ def alphabeta(pos, depth, alpha, beta, max):
             eval = alphabeta(node, depth-1, alpha, beta, True)
             minEval = min(minEval, eval)
         return minEval
+    
+def gameover(pos):
+    #TODO check if position has child nodes
+    return False
