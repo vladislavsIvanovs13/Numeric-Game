@@ -1,43 +1,237 @@
+#Izmantotie resursi:
+#https://stackoverflow.com/questions/38539617/tkinter-check-if-text-widget-is-empty
+
 from tkinter import *
-import tkinter as tk
-from tkinter import Canvas
+from tkinter import Canvas, Button, PhotoImage
+from tkinter import messagebox
+# from game_tree import GameTree
 from string_generator import Generator
 
 class Main:
     def __init__(self, window):
         self.window = window
         self.window.title("Numeric Game")
-        rules_text = """Spēles Noteikumi - Spēles sākumā ir dota ģenerētā skaitļu virkne.
-        Spēlētāji izpilda gājienus pēc kārtas.
-        Katram spēlētājam ir 0 punktu spēles sākumā.
-        Gājiena laikā spēlētājs var - saskaitīt skaitļu pāri un summu ierakstīt saskaitīto skaitļu pāra vieta vietā
-        kā arī pieskaitīt savam punktu skaitam 1 punktu, VAI nodzēst to skaitli, kas ir palicis bez pāra
-        un atņemt vienu punktu no sava punktu skaita.
-        Spēle beidzas, kad skaitļu virknē paliek viens skaitlis.
-        UZVAR SPĒLĒTĀJS, KAM IR VAIRĀK PUNKTI."""
+        
+        self.canvas = Canvas(
+            window,
+            bg = "#1A1A1A",
+            height = 1024,
+            width = 1440,
+            bd = 0,
+            highlightthickness = 0,
+            relief = "ridge"
+        )
+        self.canvas.place(x=0, y=0)
+        
+        self.image_1 = PhotoImage(file=self.add_to_path("image_1.png"))
+        self.canvas.create_image(1764.65, 761.75, image=self.image_1)
 
-        rules_label = Label(window, text=rules_text, font=('Times New Roman', 12), justify=LEFT)
-        rules_label.place(x=180, y=20)
-        self.button = Button(window, text="Generate string", height=2, width=15,
-                             command=self.display_string)
-        self.button.place(x=180, y=510)
-        self.canvas = Canvas(window, width=1000, height=300)
-        self.canvas.configure(bg="MediumAquamarine")
-        self.canvas.place(x=100, y=200)
+        self.canvas.create_text(
+            424.25,
+            186.0,
+            anchor="nw",
+            text="Spēles Noteikumi",
+            fill="#FFFFFF",
+            font=("AnonymousPro Bold", 24 * -1)
+        )
+
+        self.canvas.create_text(
+            216.25,
+            228.75,
+            anchor="nw",
+            text="Spēles sākumā ir dota ģenerētā skaitļu virkne. Katram spēlētājam ir 0 punktu spēles sākumā.",
+            fill="#FFFFFF",
+            font=("AnonymousPro Regular", 13 * -1)
+        )
+
+        self.canvas.create_text(
+            216.25,
+            264.75,
+            anchor="nw",
+            text="Gājiena laikā spēlētājs var - saskaitīt skaitļu pāri un summu ierakstīt saskaitīto skaitļu pāra  vietā\nkā arī pieskaitīt savam punktu skaitam 1 punktu, VAI nodzēst to skaitli, kas ir palicis bez pāra\nun atņemt vienu punktu no sava punktu skaita.",
+            fill="#FFFFFF",
+            font=("AnonymousPro Regular", 13 * -1)
+        )
+
+        self.canvas.create_text(
+            216.25,
+            330.75,
+            anchor="nw",
+            text="Spēle beidzas, kad skaitļu virknē paliek viens skaitlis. Uzvar spēlētājs, kam ir vairāk punktu.",
+            fill="#FFFFFF",
+            font=("AnonymousPro Regular", 13 * -1)
+        )
+
+        self.canvas.create_rectangle(
+            105.75,
+            464.25,
+            914.25,
+            508.25,
+            fill="#FFFFFF",
+            outline=""
+        )
+        
+        self.text = Text(height=1.2, width=47, font=('Times New Roman',25))
+        
+        self.button_image_1 = PhotoImage(file=self.add_to_path("button_1.png"))
+        self.button_delete = Button(
+            image=self.button_image_1,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.clear_string,
+            relief="flat"
+        )
+        self.button_delete.place(x=105.75, y=526.75, width=133.5, height=39.0)
+        
+        self.button_image_2 = PhotoImage(
+            file=self.add_to_path("button_2.png"))
+        self.button_confirm = Button(
+            image=self.button_image_2,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_confirm clicked"),
+            relief="flat"
+        )
+        self.button_confirm.place(x=400.5, y=519.25, width=216.75, height=54.0)
+        
+        self.button_image_3 = PhotoImage(
+            file=self.add_to_path("button_3.png"))
+        self.button_restart = Button(
+            image=self.button_image_3,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_restart clicked"),
+            relief="flat"
+        )
+        self.button_restart.place(x=780.75, y=526.75, width=133.5, height=39.0)
+        
+        self.button_image_4 = PhotoImage(
+            file=self.add_to_path("button_4.png"))
+        self.button_start = Button(
+            image=self.button_image_4,
+            borderwidth=0,
+            highlightthickness=0,
+            command=self.display_string,
+            relief="flat"
+        )
+        self.button_start.place(x=443.25, y=407.0, width=133.5, height=39.0)
+        
+        self.canvas.create_text(
+            831.25,
+            416.0,
+            anchor="nw",
+            text="USER",
+            fill="#FFFFFF",
+            font=("AnonymousPro Bold", 18 * -1)
+        )
+
+        self.canvas.create_text(
+            894.0,
+            401.0,
+            anchor="nw",
+            text="0",
+            fill="#FFFFFF",
+            font=("AnonymousPro Bold", 36 * -1)
+        )
+        
+        self.canvas.create_text(
+            105.75,
+            416.0,
+            anchor="nw",
+            text="COMPUTER",
+            fill="#FFFFFF",
+            font=("AnonymousPro Bold", 18 * -1)
+        )
+
+        self.canvas.create_text(
+            227.25,
+            401.75,
+            anchor="nw",
+            text="0",
+            fill="#FFFFFF",
+            font=("AnonymousPro Bold", 36 * -1)
+        )
+
+        self.canvas.create_text(
+            149.625,
+            57.0,
+            anchor="nw",
+            text="Choose who starts",
+            fill="#FFFFFF",
+            font=("AnonymousPro Bold", 24 * -1)
+        )
+
+        self.button_image_5 = PhotoImage(
+            file=self.add_to_path("button_5.png"))
+        self.button_user = Button(
+            image=self.button_image_5,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_user clicked"),
+            relief="flat"
+        )
+        self.button_user.place(x=113.5, y=106.75, width=133.5, height=39.0)
+
+        self.button_image_6 = PhotoImage(
+            file=self.add_to_path("button_6.png"))
+        self.button_computer = Button(
+            image=self.button_image_6,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_computer clicked"),
+            relief="flat"
+        )
+        self.button_computer.place(x=285.0, y=106.75, width=133.5, height=39.0)
+
+        self.canvas.create_text(
+            651.75,
+            57.0,
+            anchor="nw",
+            text="Choose algorithm",
+            fill="#FFFFFF",
+            font=("AnonymousPro Bold", 24 * -1)
+        )
+
+        self.button_image_7 = PhotoImage(
+            file=self.add_to_path("button_7.png"))
+        self.button_minimax = Button(
+            image=self.button_image_7,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_minimax clicked"),
+            relief="flat"
+        )
+        self.button_minimax.place(x=599.25, y=106.75, width=133.5, height=39.0)
+
+        self.button_image_8 = PhotoImage(
+            file=self.add_to_path("button_8.png"))
+        self.button_alpha_beta = Button(
+            image=self.button_image_8,
+            borderwidth=0,
+            highlightthickness=0,
+            command=lambda: print("button_alpha_beta clicked"),
+            relief="flat"
+        )
+        self.button_alpha_beta.place(x=780.75, y=106.75, width=133.5, height=39.0)
 
     def display_string(self):
-        string = Generator.generate_string(25)
-        for number in string:
-            print(number, end='')
-        text = Text(window, bg="MediumAquamarine", height=1, width=37, font=('Times New Roman',25))
-        text.insert(tk.END, string)
-        text.place(x=280,y=340)
+        if not len(self.text.get("1.0", "end-1c")) == 0:
+            return messagebox.showwarning("Warning", "Press 'Delete' first") 
+        string = Generator.generate_string()
+        self.text.insert(END, string)
+        self.text.place(x=108, y=465)
+        # tree = GameTree.construct_tree(string)
+        
+    def clear_string(self):
+        self.text.delete(1.0, END)
+    
+    def add_to_path(self, file_name):
+        return "./assets/" + file_name
+
         
 if __name__ == "__main__":
     window = Tk()
-    window.geometry("1200x800")
-    window.config(background="MediumSeaGreen")
-    window.maxsize(1200, 800)
+    window.geometry("1000x600")
     Main(window)
     window.mainloop()
 
