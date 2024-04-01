@@ -1,5 +1,6 @@
-#Aizgūts no studiju kursa materiāliem:
+#Balstīts uz studiju kursa materiāliem:
 # https://estudijas.rtu.lv/mod/resource/view.php?id=4161716
+from minimax_solver import MinimaxSolver
 from node_evaluator import Evaluator
 from string_generator import MAX_NUMBER
 
@@ -11,6 +12,8 @@ PAIR_LENGTH = 2
 DEPTH = 5
  
 class Node:
+    #p1 - number of computer points
+    #p2 - number of person points
     def __init__(self, id, string, p1, p2, level, heu=0):
         self.id = id
         self.string = string
@@ -29,6 +32,15 @@ class Tree:
         
     def add_edge(self, start_id, end_id):
         self.edges[start_id] = self.edges.get(start_id, []) + [end_id]
+
+    def get_max_level(self):
+        return self.nodes[len(self.nodes) - 1].level
+
+    #get the node from ID
+    def get_node(self, id):
+        for node in reversed(self.nodes):
+            if node.id == id:
+                return node
  
 class GameTree:
     def check_step(step_type, generated_nodes, current_node, ptr, game_tree):
@@ -90,7 +102,7 @@ class GameTree:
             game_tree.add_edge(current_node.id, id_new)
         else:
             j -= 1
-            game_tree.add_edge(current_node.id, game_tree.nodes[i].id)        
+            game_tree.add_edge(current_node.id, game_tree.nodes[i].id)
     
     def construct_tree(root_node):
         global j
@@ -110,13 +122,20 @@ class GameTree:
             generated_nodes.pop(0)
 
         for x in game_tree.nodes:
-            print(x.id,x.string,x.p1,x.p2,x.level,x.heu)
+            print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
 
         for x, y in game_tree.edges.items():
             print(x, y)
             
-        return [game_tree.nodes, game_tree.edges] 
+        return game_tree
             
-GameTree.construct_tree('16324')
+# GameTree.construct_tree('16324')
 # 16324 should be replaced with the generated string
 # from string_generator class
+
+if __name__ == "__main__":
+    tree = GameTree.construct_tree('16324')
+    newTree = MinimaxSolver.minimax(tree)
+
+    for x in newTree.nodes:
+        print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
