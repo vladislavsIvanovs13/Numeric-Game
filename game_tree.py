@@ -1,6 +1,6 @@
-#Aizgūts no studiju kursa materiāliem:
+#Balstīts uz studiju kursa materiāliem:
 # https://estudijas.rtu.lv/mod/resource/view.php?id=4161716
-from minimax_algorithm import MiniMax
+from minimax_solver import MinimaxSolver
 from node_evaluator import Evaluator
 from string_generator import MAX_NUMBER
 
@@ -33,7 +33,7 @@ class Tree:
     def add_edge(self, start_id, end_id):
         self.edges[start_id] = self.edges.get(start_id, []) + [end_id]
 
-    def get_MAX_level(self):
+    def get_max_level(self):
         return self.nodes[len(self.nodes) - 1].level
 
     #get the node from ID
@@ -122,7 +122,7 @@ class GameTree:
             generated_nodes.pop(0)
 
         for x in game_tree.nodes:
-            print(x.id, x.string, "p1 = ", x.p1, "p2 = ", x.p2, "level = ", x.level, "heu = ", x.heu)
+            print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
 
         for x, y in game_tree.edges.items():
             print(x, y)
@@ -134,12 +134,8 @@ class GameTree:
 # from string_generator class
 
 if __name__ == "__main__":
-    tree = GameTree.construct_tree('52163')
-    newTree = MiniMax.minimax(tree)
-
-    print()
-    print("New Tree:")
-    print()
+    tree = GameTree.construct_tree('16324')
+    newTree = MinimaxSolver.minimax(tree)
 
     for x in newTree.nodes:
-        print(x.id, x.string, "p1 = ", x.p1, "p2 = ", x.p2, "level = ", x.level, "heu = ", x.heu)
+        print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
