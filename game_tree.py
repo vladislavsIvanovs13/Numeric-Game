@@ -15,7 +15,7 @@ DEPTH = 5
 class Node:
     # p1 - number of computer points
     # p2 - number of person points
-    def __init__(self, id, string, p1, p2, level, heu=0):
+    def __init__(self, id, string, p1, p2, level, heu=float('-inf')):
         self.id = id
         self.string = string
         self.p1 = p1
