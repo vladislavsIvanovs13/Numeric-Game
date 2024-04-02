@@ -15,28 +15,32 @@ class AlphaBeta:
             return node.heu
 
         if max_level:
-            best_max_heu = float('-inf')
+            best_heu = float('-inf')
             children_node_ids = self.tree.edges.get(node.id)
+            heu_array = []
             for id in children_node_ids:
-                node.heu = AlphaBeta.calculate_heu(self, self.tree.get_node(id), depth + 1, alpha, beta, False)
-                best_max_heu = max(best_max_heu, node.heu)
-                alpha = max(alpha, best_max_heu)
+                heu_array.append(AlphaBeta.calculate_heu(self, self.tree.get_node(id), depth + 1, alpha, beta, False))
+                node.heu = max(heu_array)
+                best_heu = max(best_heu, node.heu)
+                alpha = max(alpha, best_heu)
                 # cut off the unnecessary node
                 if (beta <= alpha):
                     break
-            return best_max_heu
+            return best_heu
         else:
-            best_min_heu = float("inf")
+            best_heu = float("inf")
             children_node_ids = self.tree.edges.get(node.id)
+            heu_array = []
             for id in children_node_ids:
-                node.heu = AlphaBeta.calculate_heu(self, self.tree.get_node(id), depth + 1, alpha, beta, True)
-                best_min_heu = min(best_min_heu, node.heu)
-                beta = min(beta, best_min_heu)
+                heu_array.append(AlphaBeta.calculate_heu(self, self.tree.get_node(id), depth + 1, alpha, beta, True))
+                node.heu = min(heu_array)
+                best_heu = min(best_heu, node.heu)
+                beta = min(beta, best_heu)
                 # cut off the unnecessary node
                 if (beta <= alpha):
                     break
-            return best_min_heu
+            return best_heu
 
     def alphabeta(self):
-        AlphaBeta.calculate_heu(self, self.tree.nodes[0], 1, float('inf'), float('-inf'), False)
+        AlphaBeta.calculate_heu(self, self.tree.nodes[0], 1, float('-inf'), float('inf'), True)
         return self.tree
