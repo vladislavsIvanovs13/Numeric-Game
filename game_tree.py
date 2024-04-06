@@ -1,7 +1,5 @@
 #Balstīts uz studiju kursa materiāliem:
 # https://estudijas.rtu.lv/mod/resource/view.php?id=4161716
-from alpha_beta import AlphaBeta
-from minimax_solver import MinimaxSolver
 from node_evaluator import Evaluator
 from string_generator import MAX_NUMBER
 
@@ -10,7 +8,7 @@ BIG_NUMBERS = {7, 8, 9, 10, 11, 12}
 MOVE_ONE = '1'
 MOVE_TWO = '2'
 PAIR_LENGTH = 2
-DEPTH = 5
+DEPTH = 3
 
 
 class Node:
@@ -139,9 +137,9 @@ class GameTree:
 # 16324 should be replaced with the generated string
 # from string_generator class
 
-if __name__ == "__main__":
-    tree = GameTree.construct_tree('52163')
-    newTree = AlphaBeta(tree, DEPTH).alphabeta()
+# if __name__ == "__main__":
+#     tree = GameTree.construct_tree('52163')
+#     # newTree = AlphaBeta(tree, DEPTH).alphabeta()
 
-    for x in newTree.nodes:
-        print(x.id, x.string, x.p1, x.p2, x.level, "heu = " ,x.heu)
+#     for x in newTree.nodes:
+#         print(x.id, x.string, x.p1, x.p2, x.level, "heu = " ,x.heu)

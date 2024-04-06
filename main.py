@@ -1,10 +1,14 @@
 #Izmantotie resursi:
 #https://stackoverflow.com/questions/38539617/tkinter-check-if-text-widget-is-empty
 
+import random
 from tkinter import *
 from tkinter import Canvas, Button, PhotoImage
 from tkinter import messagebox
 # from game_tree import GameTree
+from alpha_beta import AlphaBetaSolver
+from game_tree import GameTree
+from minimax_solver import MinimaxSolver
 from string_generator import Generator
 
 class Main:
@@ -71,8 +75,12 @@ class Main:
             outline=""
         )
         
+        self.modified_tree = None
         self.user_flag = None
         self.minimax_flag = None
+        self.user_score = 0
+        self.computer_score = 0
+        self.move = 1
         
         self.text = Text(height=1.2, width=47, font=('Times New Roman',25))
         
@@ -92,7 +100,7 @@ class Main:
             image=self.button_image_2,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_confirm clicked"),
+            command=self.confirm,
             relief="flat"
         )
         self.button_confirm.place(x=400.5, y=519.25, width=216.75, height=54.0)
@@ -128,11 +136,11 @@ class Main:
             font=("AnonymousPro Bold", 18 * -1)
         )
 
-        self.canvas.create_text(
+        self.user_score_text = self.canvas.create_text(
             894.0,
             401.0,
             anchor="nw",
-            text="0",
+            text=str(self.user_score),
             fill="#FFFFFF",
             font=("AnonymousPro Bold", 36 * -1)
         )
@@ -146,11 +154,11 @@ class Main:
             font=("AnonymousPro Bold", 18 * -1)
         )
 
-        self.canvas.create_text(
+        self.computer_score_text = self.canvas.create_text(
             227.25,
             401.75,
             anchor="nw",
-            text="0",
+            text=str(self.computer_score),
             fill="#FFFFFF",
             font=("AnonymousPro Bold", 36 * -1)
         )
@@ -218,13 +226,80 @@ class Main:
         self.button_alpha_beta.place(x=780.75, y=106.75, width=133.5, height=39.0)
 
     def start(self):
-        if not len(self.text.get("1.0", "end-1c")) == 0:
-            return messagebox.showwarning("Warning", "Press 'Delete' first") 
-        string = Generator.generate_string()
-        self.text.insert(END, string)
-        self.text.place(x=108, y=465)
-        # tree = GameTree.construct_tree(string)
+        if not (self.user_flag == None and self.minimax_flag == None):
+            if not len(self.text.get("1.0", "end-1c")) == 0:
+                return messagebox.showwarning("Warning", "Press 'Delete' first") 
+            self.correct_string = Generator.generate_string()
+            self.text.insert(END, self.correct_string)
+            self.text.place(x=108, y=465)
+            
+            tree = GameTree.construct_tree(self.correct_string)
+            if (self.minimax_flag):
+                self.modified_tree = MinimaxSolver.minimax(tree)
+            else:
+                self.modified_tree = AlphaBetaSolver.alpha_beta(tree)
+            
+            if not (self.user_flag):
+                self.best_node = self.choose_best_node(self.modified_tree)
+                self.correct_string = self.best_node.string #saves string for the upcoming user move check
+                self.clear_string()
+                self.text.insert(END, self.correct_string)
+                self.text.place(x=108, y=465)
+                
+                self.computer_score += 1
+                
+                self.canvas.itemconfigure(self.computer_score_text, text=self.computer_score)
+                self.move += 1
+            
+        else:
+            return messagebox.showwarning("Warning", "Please prepare well")
         
+    def choose_best_node(self, modified_tree):
+        root = modified_tree.nodes[0]
+        children_nodes = modified_tree.edges.get(root.id)  
+        best_heu = root.heu
+        
+        best_children = []
+        for children_node in children_nodes:
+            if (children_node.heu == best_heu):
+                best_children.append(children_node)
+        
+        return self.shuffle(best_children)
+        
+        
+    def shuffle(self, best_children):
+        index = random.randint(0, len(best_children)-1)
+        return best_children[index]
+    
+    def confirm(self):
+        if not (self.user_flag == None and self.minimax_flag == None):
+            if len(self.text.get("1.0", "end-1c")) == 0:
+                return messagebox.showwarning("Warning", "Press 'Start' first") 
+                
+            if (self.user_flag):
+                string = self.text.get("1.0", "end-1c")
+                node = None
+                possible_moves = self.modified_tree.edges.get(self.best_node.id)
+                
+                for move in possible_moves:
+                    if (move.string == string):
+                        node = move
+                        break
+                
+                if (node == None):
+                    self.clear_string()
+                    self.text.insert(END, self.correct_string)
+                    self.text.place(x=108, y=465)
+                    return messagebox.showwarning("Warning", "Please follow the rules") 
+                
+                    
+            
+        else:
+            return messagebox.showwarning("Warning", "Please prepare well")  
+        
+    def check_valid_move(self):
+        pass
+    
     def clear_string(self):
         self.text.delete(1.0, END)
         
@@ -283,6 +358,12 @@ class Main:
         self.button_image_8 = PhotoImage(
             file=self.add_to_path("button_8.png"))
         self.button_alpha_beta.config(image=self.button_image_8)
+        
+        self.canvas.itemconfigure(self.user_score_text, text=str(0))
+        self.canvas.itemconfigure(self.computer_score_text, text=str(0))
+        
+        self.user_score = 0
+        self.computer_score = 0
     
     def add_to_path(self, file_name):
         return "./assets/" + file_name

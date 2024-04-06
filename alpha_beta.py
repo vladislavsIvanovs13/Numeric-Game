@@ -1,8 +1,9 @@
 # Pseudocode: https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning/
-class AlphaBeta:
-    def __init__(self, tree, DEPTH):
+from game_tree import DEPTH
+
+class AlphaBetaSolver:
+    def __init__(self, tree):
         self.tree = tree
-        self.DEPTH = DEPTH
 
     def no_children(self, node):
         if (self.tree.edges.get(node.id) != None):
@@ -11,7 +12,7 @@ class AlphaBeta:
             return True
 
     def calculate_heu(self, node, depth, alpha, beta, max_level):
-        if (depth == self.DEPTH or AlphaBeta.no_children(self,node)):
+        if (depth == DEPTH or AlphaBetaSolver.no_children(self,node)):
             return node.heu
 
         if max_level:
@@ -19,7 +20,7 @@ class AlphaBeta:
             children_nodes = self.tree.edges.get(node.id)
             heu_array = []
             for n in children_nodes:
-                heu_array.append(AlphaBeta.calculate_heu(self, n, depth + 1, alpha, beta, False))
+                heu_array.append(AlphaBetaSolver.calculate_heu(self, n, depth + 1, alpha, beta, False))
                 node.heu = max(heu_array)
                 best_heu = max(best_heu, node.heu)
                 alpha = max(alpha, best_heu)
@@ -32,7 +33,7 @@ class AlphaBeta:
             children_nodes = self.tree.edges.get(node.id)
             heu_array = []
             for n in children_nodes:
-                heu_array.append(AlphaBeta.calculate_heu(self, n, depth + 1, alpha, beta, True))
+                heu_array.append(AlphaBetaSolver.calculate_heu(self, n, depth + 1, alpha, beta, True))
                 node.heu = min(heu_array)
                 best_heu = min(best_heu, node.heu)
                 beta = min(beta, best_heu)
@@ -41,6 +42,6 @@ class AlphaBeta:
                     break
             return best_heu
 
-    def alphabeta(self):
-        AlphaBeta.calculate_heu(self, self.tree.nodes[0], 1, float('-inf'), float('inf'), True)
+    def alpha_beta(self):
+        AlphaBetaSolver.calculate_heu(self, self.tree.nodes[0], 1, float('-inf'), float('inf'), True)
         return self.tree
