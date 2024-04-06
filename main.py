@@ -71,6 +71,9 @@ class Main:
             outline=""
         )
         
+        self.user_flag = None
+        self.minimax_flag = None
+        
         self.text = Text(height=1.2, width=47, font=('Times New Roman',25))
         
         self.button_image_1 = PhotoImage(file=self.add_to_path("button_1.png"))
@@ -167,7 +170,7 @@ class Main:
             image=self.button_image_5,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_user clicked"),
+            command=self.play_user,
             relief="flat"
         )
         self.button_user.place(x=113.5, y=106.75, width=133.5, height=39.0)
@@ -178,7 +181,7 @@ class Main:
             image=self.button_image_6,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_computer clicked"),
+            command=self.play_computer,
             relief="flat"
         )
         self.button_computer.place(x=285.0, y=106.75, width=133.5, height=39.0)
@@ -198,7 +201,7 @@ class Main:
             image=self.button_image_7,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_minimax clicked"),
+            command=self.play_minimax,
             relief="flat"
         )
         self.button_minimax.place(x=599.25, y=106.75, width=133.5, height=39.0)
@@ -209,7 +212,7 @@ class Main:
             image=self.button_image_8,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_alpha_beta clicked"),
+            command=self.play_alpha_beta,
             relief="flat"
         )
         self.button_alpha_beta.place(x=780.75, y=106.75, width=133.5, height=39.0)
@@ -224,7 +227,71 @@ class Main:
         
     def clear_string(self):
         self.text.delete(1.0, END)
+        
+    def play_user(self):
+        if (self.user_flag == None):
+            self.user_flag = True
+            self.button_image_9 = PhotoImage(
+                file=self.add_to_path("button_9.png"))
+            self.button_user = Button(
+                image=self.button_image_9,
+                borderwidth=0,
+                highlightthickness=0,
+                command=self.play_user,
+                relief="flat"
+            )
+            self.button_user.place(x=113.5, y=106.75, width=133.5, height=39.0)
+        else:
+            return messagebox.showwarning("Warning", "Player has already been chosen")
     
+    def play_computer(self):
+        if (self.user_flag == None):
+            self.user_flag = False
+            self.button_image_6 = PhotoImage(
+                file=self.add_to_path("button_10.png"))
+            self.button_computer = Button(
+                image=self.button_image_6,
+                borderwidth=0,
+                highlightthickness=0,
+                command=self.play_computer,
+                relief="flat"
+            )
+            self.button_computer.place(x=285.0, y=106.75, width=133.5, height=39.0)
+        else:
+            return messagebox.showwarning("Warning", "Player has already been chosen")
+        
+    def play_minimax(self):
+        if (self.minimax_flag == None):
+            self.minimax_flag = True
+            self.button_image_7 = PhotoImage(
+                file=self.add_to_path("button_11.png"))
+            self.button_minimax = Button(
+                image=self.button_image_7,
+                borderwidth=0,
+                highlightthickness=0,
+                command=self.play_minimax,
+                relief="flat"
+            )
+            self.button_minimax.place(x=599.25, y=106.75, width=133.5, height=39.0)
+        else:
+            return messagebox.showwarning("Warning", "Algorithm has already been chosen")
+        
+    def play_alpha_beta(self):
+        if (self.minimax_flag == None):
+            self.minimax_flag = False
+            self.button_image_8 = PhotoImage(
+                file=self.add_to_path("button_12.png"))
+            self.button_alpha_beta = Button(
+                image=self.button_image_8,
+                borderwidth=0,
+                highlightthickness=0,
+                command=self.play_alpha_beta,
+                relief="flat"
+            )
+            self.button_alpha_beta.place(x=780.75, y=106.75, width=133.5, height=39.0)
+        else:
+            return messagebox.showwarning("Warning", "Algorithm has already been chosen")
+        
     def add_to_path(self, file_name):
         return "./assets/" + file_name
 
