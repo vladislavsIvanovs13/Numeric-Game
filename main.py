@@ -103,7 +103,7 @@ class Main:
             image=self.button_image_3,
             borderwidth=0,
             highlightthickness=0,
-            command=lambda: print("button_restart clicked"),
+            command=self.restart,
             relief="flat"
         )
         self.button_restart.place(x=780.75, y=526.75, width=133.5, height=39.0)
@@ -114,7 +114,7 @@ class Main:
             image=self.button_image_4,
             borderwidth=0,
             highlightthickness=0,
-            command=self.display_string,
+            command=self.start,
             relief="flat"
         )
         self.button_start.place(x=443.25, y=407.0, width=133.5, height=39.0)
@@ -217,7 +217,7 @@ class Main:
         )
         self.button_alpha_beta.place(x=780.75, y=106.75, width=133.5, height=39.0)
 
-    def display_string(self):
+    def start(self):
         if not len(self.text.get("1.0", "end-1c")) == 0:
             return messagebox.showwarning("Warning", "Press 'Delete' first") 
         string = Generator.generate_string()
@@ -233,14 +233,7 @@ class Main:
             self.user_flag = True
             self.button_image_9 = PhotoImage(
                 file=self.add_to_path("button_9.png"))
-            self.button_user = Button(
-                image=self.button_image_9,
-                borderwidth=0,
-                highlightthickness=0,
-                command=self.play_user,
-                relief="flat"
-            )
-            self.button_user.place(x=113.5, y=106.75, width=133.5, height=39.0)
+            self.button_user.config(image=self.button_image_9)
         else:
             return messagebox.showwarning("Warning", "Player has already been chosen")
     
@@ -249,14 +242,7 @@ class Main:
             self.user_flag = False
             self.button_image_6 = PhotoImage(
                 file=self.add_to_path("button_10.png"))
-            self.button_computer = Button(
-                image=self.button_image_6,
-                borderwidth=0,
-                highlightthickness=0,
-                command=self.play_computer,
-                relief="flat"
-            )
-            self.button_computer.place(x=285.0, y=106.75, width=133.5, height=39.0)
+            self.button_computer.config(image=self.button_image_6)
         else:
             return messagebox.showwarning("Warning", "Player has already been chosen")
         
@@ -265,14 +251,7 @@ class Main:
             self.minimax_flag = True
             self.button_image_7 = PhotoImage(
                 file=self.add_to_path("button_11.png"))
-            self.button_minimax = Button(
-                image=self.button_image_7,
-                borderwidth=0,
-                highlightthickness=0,
-                command=self.play_minimax,
-                relief="flat"
-            )
-            self.button_minimax.place(x=599.25, y=106.75, width=133.5, height=39.0)
+            self.button_minimax.config(image=self.button_image_7)
         else:
             return messagebox.showwarning("Warning", "Algorithm has already been chosen")
         
@@ -281,17 +260,30 @@ class Main:
             self.minimax_flag = False
             self.button_image_8 = PhotoImage(
                 file=self.add_to_path("button_12.png"))
-            self.button_alpha_beta = Button(
-                image=self.button_image_8,
-                borderwidth=0,
-                highlightthickness=0,
-                command=self.play_alpha_beta,
-                relief="flat"
-            )
-            self.button_alpha_beta.place(x=780.75, y=106.75, width=133.5, height=39.0)
+            self.button_alpha_beta.config(image=self.button_image_8)
         else:
             return messagebox.showwarning("Warning", "Algorithm has already been chosen")
+    
+    def restart(self):
+        self.clear_string()
+        self.user_flag = None
+        self.minimax_flag = None
+        self.button_image_5 = PhotoImage(
+            file=self.add_to_path("button_5.png"))
+        self.button_user.config(image=self.button_image_5)
         
+        self.button_image_6 = PhotoImage(
+            file=self.add_to_path("button_6.png"))
+        self.button_computer.config(image=self.button_image_6)
+        
+        self.button_image_7 = PhotoImage(
+            file=self.add_to_path("button_7.png"))
+        self.button_minimax.config(image=self.button_image_7)
+        
+        self.button_image_8 = PhotoImage(
+            file=self.add_to_path("button_8.png"))
+        self.button_alpha_beta.config(image=self.button_image_8)
+    
     def add_to_path(self, file_name):
         return "./assets/" + file_name
 
