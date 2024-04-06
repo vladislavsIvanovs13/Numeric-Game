@@ -16,10 +16,10 @@ class AlphaBeta:
 
         if max_level:
             best_heu = float('-inf')
-            children_node_ids = self.tree.edges.get(node.id)
+            children_nodes = self.tree.edges.get(node.id)
             heu_array = []
-            for id in children_node_ids:
-                heu_array.append(AlphaBeta.calculate_heu(self, self.tree.get_node(id), depth + 1, alpha, beta, False))
+            for n in children_nodes:
+                heu_array.append(AlphaBeta.calculate_heu(self, n, depth + 1, alpha, beta, False))
                 node.heu = max(heu_array)
                 best_heu = max(best_heu, node.heu)
                 alpha = max(alpha, best_heu)
@@ -29,10 +29,10 @@ class AlphaBeta:
             return best_heu
         else:
             best_heu = float("inf")
-            children_node_ids = self.tree.edges.get(node.id)
+            children_nodes = self.tree.edges.get(node.id)
             heu_array = []
-            for id in children_node_ids:
-                heu_array.append(AlphaBeta.calculate_heu(self, self.tree.get_node(id), depth + 1, alpha, beta, True))
+            for n in children_nodes:
+                heu_array.append(AlphaBeta.calculate_heu(self, n, depth + 1, alpha, beta, True))
                 node.heu = min(heu_array)
                 best_heu = min(best_heu, node.heu)
                 beta = min(beta, best_heu)

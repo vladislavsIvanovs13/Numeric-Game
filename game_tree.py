@@ -32,8 +32,8 @@ class Tree:
     def add_node(self, Node):
         self.nodes.append(Node)
 
-    def add_edge(self, start_id, end_id):
-        self.edges[start_id] = self.edges.get(start_id, []) + [end_id]
+    def add_edge(self, start_id, node):
+        self.edges[start_id] = self.edges.get(start_id, []) + [node]
 
     def get_max_level(self):
         return self.nodes[len(self.nodes) - 1].level
@@ -103,10 +103,10 @@ class GameTree:
         if not checked:
             game_tree.add_node(node_new)
             generated_nodes.append(Node(id_new, string_new, p1_new, p2_new, level_new))
-            game_tree.add_edge(current_node.id, id_new)
+            game_tree.add_edge(current_node.id, node_new)
         else:
             j -= 1
-            game_tree.add_edge(current_node.id, game_tree.nodes[i].id)
+            game_tree.add_edge(current_node.id, game_tree.nodes[i])
 
     def construct_tree(root_node):
         global j
