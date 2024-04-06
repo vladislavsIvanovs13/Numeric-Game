@@ -1,5 +1,6 @@
 #Balstīts uz studiju kursa materiāliem:
 # https://estudijas.rtu.lv/mod/resource/view.php?id=4161716
+from alpha_beta import AlphaBeta
 from minimax_solver import MinimaxSolver
 from node_evaluator import Evaluator
 from string_generator import MAX_NUMBER
@@ -10,60 +11,64 @@ MOVE_ONE = '1'
 MOVE_TWO = '2'
 PAIR_LENGTH = 2
 DEPTH = 5
- 
+
+
 class Node:
-    #p1 - number of computer points
-    #p2 - number of person points
-    def __init__(self, id, string, p1, p2, level, heu=0):
+    # p1 - number of computer points
+    # p2 - number of person points
+    def __init__(self, id, string, p1, p2, level, heu=float('-inf')):
         self.id = id
         self.string = string
         self.p1 = p1
         self.p2 = p2
         self.level = level
         self.heu = heu
-        
+
+
 class Tree:
     def __init__(self):
         self.nodes = []
         self.edges = dict()
-    
+
     def add_node(self, Node):
         self.nodes.append(Node)
-        
-    def add_edge(self, start_id, end_id):
-        self.edges[start_id] = self.edges.get(start_id, []) + [end_id]
+
+    def add_edge(self, start_id, node):
+        self.edges[start_id] = self.edges.get(start_id, []) + [node]
 
     def get_max_level(self):
         return self.nodes[len(self.nodes) - 1].level
 
-    #get the node from ID
+    # get the node from ID
     def get_node(self, id):
         for node in reversed(self.nodes):
             if node.id == id:
                 return node
- 
+
+
 class GameTree:
     def check_step(step_type, generated_nodes, current_node, ptr, game_tree):
         global j
         id_new = 'A' + str(j)
         string_new = current_node.string
-        
+
         if (step_type == MOVE_TWO) and (len(string_new) % 2 == 1) \
                 and (len(string_new) > 1):
             string_new = string_new[:-1]
-            
+
         elif (step_type == MOVE_ONE):
-            sum = int(string_new[ptr:ptr+1]) + \
-                    int(string_new[ptr+1:ptr+2])
-            
+            sum = int(string_new[ptr:ptr + 1]) + \
+                  int(string_new[ptr + 1:ptr + 2])
+
             if sum in BIG_NUMBERS:
                 sum -= MAX_NUMBER
-                
+
             string_new = string_new[:ptr] + str(sum) \
-                        + string_new[ptr+2:]
-            
-        else: return
-        
+                         + string_new[ptr + 2:]
+
+        else:
+            return
+
         j += 1
         if (current_node.level % 2 == 0):
             p1_new = current_node.p1
@@ -77,22 +82,22 @@ class GameTree:
                 p1_new = current_node.p1 + POINT
             else:
                 p1_new = current_node.p1 - POINT
-        
+
         level_new = current_node.level + 1
-        
+
         if (level_new == DEPTH):
             heu_new = Evaluator.evaluate_node(p1_new, p2_new, step_type)
-            node_new = Node(id_new, string_new, p1_new, p2_new, level_new, heu_new)    
+            node_new = Node(id_new, string_new, p1_new, p2_new, level_new, heu_new)
         else:
             node_new = Node(id_new, string_new, p1_new, p2_new, level_new)
-        
+
         checked = False
         i = 0
         while (not checked) and (i <= len(game_tree.nodes) - 1):
             if (game_tree.nodes[i].string == node_new.string) \
-                and (game_tree.nodes[i].p1 == node_new.p1) \
-                and (game_tree.nodes[i].p2 == node_new.p2) \
-                and (game_tree.nodes[i].level == node_new.level):
+                    and (game_tree.nodes[i].p1 == node_new.p1) \
+                    and (game_tree.nodes[i].p2 == node_new.p2) \
+                    and (game_tree.nodes[i].level == node_new.level):
                 checked = True
             else:
                 i += 1
@@ -103,7 +108,7 @@ class GameTree:
         else:
             j -= 1
             game_tree.add_edge(current_node.id, game_tree.nodes[i])
-    
+
     def construct_tree(root_node):
         global j
         game_tree = Tree()
@@ -126,16 +131,17 @@ class GameTree:
 
         for x, y in game_tree.edges.items():
             print(x, y)
-            
+
         return game_tree
-            
+
+
 # GameTree.construct_tree('16324')
 # 16324 should be replaced with the generated string
 # from string_generator class
 
 if __name__ == "__main__":
-    tree = GameTree.construct_tree('16324')
-    newTree = MinimaxSolver.minimax(tree)
+    tree = GameTree.construct_tree('52163')
+    newTree = AlphaBeta(tree, DEPTH).alphabeta()
 
     for x in newTree.nodes:
-        print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
+        print(x.id, x.string, x.p1, x.p2, x.level, "heu = " ,x.heu)
