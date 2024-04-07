@@ -105,12 +105,12 @@ class GameTree:
             j -= 1
             game_tree.add_edge(current_node.id, game_tree.nodes[i])
 
-    def construct_tree(root_node):
+    def construct_tree(root_node, p1 = 0, p2 = 0):
         global j
         game_tree = Tree()
         generated_nodes = []
-        game_tree.add_node(Node('A1', root_node, 0, 0, 1))
-        generated_nodes.append(Node('A1', root_node, 0, 0, 1))
+        game_tree.add_node(Node('A1', root_node, p1, p2, 1))
+        generated_nodes.append(Node('A1', root_node, p1, p2, 1))
 
         j = 2
         while (len(generated_nodes) > 0) and (generated_nodes[0].level < DEPTH):

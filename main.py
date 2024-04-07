@@ -238,9 +238,17 @@ class Main:
                 self.modified_tree = MinimaxSolver.minimax(tree)
             else:
                 self.modified_tree = AlphaBetaSolver.alpha_beta(tree)
+
+            self.computer_score = 0
+            self.user_score = 0
+            self.move = 1
             
             if not (self.user_flag):
                 best_node = self.choose_best_node()
+
+                self.best_node_id = best_node.id
+                self.correct_string = best_node.string
+                # saves string for the upcoming user move check
                 
                 self.clear_string()
                 self.text.insert(END, self.correct_string)
@@ -250,13 +258,14 @@ class Main:
                 
                 self.canvas.itemconfigure(self.computer_score_text, text=self.computer_score)
                 self.move += 1
-                
+
+                self.start_after_user = False
             else:
-                best_node = self.modified_tree.nodes[0]
-                
-            self.best_node_id = best_node.id
-            self.correct_string = best_node.string
-            #saves string for the upcoming user move check
+                # to see if we need to re-generate the tree
+                self.start_after_user = True
+                # to check the first user move
+                self.best_node_id = self.modified_tree.nodes[0]
+
             
         else:
             return messagebox.showwarning("Warning", "Please prepare well")
@@ -292,48 +301,42 @@ class Main:
               
             # user logic
             string = self.text.get("1.0", "end-1c")
-            valid_node = self.check_valid_move(string)
+            self.valid_node = self.check_valid_move(string)
             
-            if (valid_node == None):
+            if (self.valid_node == None):
                 self.clear_string()
                 self.text.insert(END, self.correct_string)
                 self.text.place(x=108, y=465)
                 return messagebox.showwarning("Warning", "Please follow the rules") 
-            
-            if (self.move % 2 == 0):
-                self.user_score = valid_node.p2
-            else:
-                self.user_score = valid_node.p1
-                
+
+            self.user_score = self.valid_node.p2
             self.canvas.itemconfigure(self.user_score_text, text=self.user_score)
             self.move += 1
             
             self.check_if_to_reconstruct_tree()
             
             # computer logic
-            best_node = self.choose_best_node(valid_node)
+            best_node = self.choose_best_node(self.valid_node)
             self.best_node_id = best_node.id
             self.correct_string = best_node.string
             
             self.clear_string()
-            self.text.insert(END, best_node.string)
+            self.text.insert(END, self.correct_string)
             self.text.place(x=108, y=465)
             
-            if (self.move % 2 == 0):
-                self.computer_score = best_node.p2
-            else:
-                self.computer_score = best_node.p1
+            self.computer_score = best_node.p1
             
             self.canvas.itemconfigure(self.computer_score_text, text=self.computer_score)
             self.move += 1
             
-            self.check_if_to_reconstruct_tree()
+            # self.check_if_to_reconstruct_tree()
             
         else:
             return messagebox.showwarning("Warning", "Please prepare well")  
         
     def check_valid_move(self, string):
         possible_moves = self.modified_tree.edges.get(self.best_node_id)
+        valid_node = None
         
         for move in possible_moves:
             if (move.string == string):
@@ -343,15 +346,19 @@ class Main:
         return valid_node
     
     def check_if_to_reconstruct_tree(self):
-        if (self.move % DEPTH == 0):
-            tree = GameTree.construct_tree(self.correct_string)
-        
+        if(self.move % DEPTH == 0 or self.start_after_user):
+            tree = GameTree.construct_tree(self.correct_string, self.computer_score, self.user_score)
+
+            self.check_DEPTH() !!!!!!!!!!
+
             if (self.minimax_flag):
                 self.modified_tree = MinimaxSolver.minimax(tree)
             else:
                 self.modified_tree = AlphaBetaSolver.alpha_beta(tree)
-        
-            self.best_node_id = 'A1'
+
+            self.start_after_user = False
+            self.valid_node = None
+            self.move = 1
             
     def clear_string(self):
         self.text.delete(1.0, END)
