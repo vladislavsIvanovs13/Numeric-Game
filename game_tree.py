@@ -8,12 +8,10 @@ BIG_NUMBERS = {7, 8, 9, 10, 11, 12}
 MOVE_ONE = '1'
 MOVE_TWO = '2'
 PAIR_LENGTH = 2
-DEPTH = 3
+DEPTH = 5
 
 
 class Node:
-    # p1 - number of computer points
-    # p2 - number of person points
     def __init__(self, id, string, p1, p2, level, heu=float('-inf')):
         self.id = id
         self.string = string
@@ -124,11 +122,11 @@ class GameTree:
             GameTree.check_step(MOVE_TWO, generated_nodes, current_node, ptr, game_tree)
             generated_nodes.pop(0)
 
-        for x in game_tree.nodes:
-            print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
+        # for x in game_tree.nodes:
+        #     print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
 
-        for x, y in game_tree.edges.items():
-            print(x, y)
+        # for x, y in game_tree.edges.items():
+        #     print(x, y)
 
         return game_tree
 
