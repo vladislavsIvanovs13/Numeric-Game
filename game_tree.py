@@ -125,8 +125,8 @@ class GameTree:
         for x in game_tree.nodes:
             print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
 
-        for x, y in game_tree.edges.items():
-            print(x, [node.id for node in y])
+        # for x, y in game_tree.edges.items():
+        #     print(x, [node.id for node in y])
 
         return game_tree
 

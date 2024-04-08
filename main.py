@@ -269,6 +269,9 @@ class Main:
         
         print(valid_node.id)
         
+        if ((self.move - 1) % (DEPTH - 1) == 0):
+            valid_node.id = 'A1'
+        
         children_nodes = self.modified_tree.edges.get(valid_node.id)  
         best_heu = valid_node.heu
         
