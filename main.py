@@ -237,13 +237,13 @@ class Main:
             if (self.minimax_flag):
                 self.modified_tree = MinimaxSolver.minimax(tree)
             else:
-                self.modified_tree = AlphaBetaSolver.alpha_beta(tree)
+                self.modified_tree = AlphaBetaSolver(tree).alpha_beta()
             
             if not (self.user_flag):
                 best_node = self.choose_best_node()
                 
                 self.clear_string()
-                self.text.insert(END, self.correct_string)
+                self.text.insert(END, best_node.string)
                 self.text.place(x=108, y=465)
                 
                 self.computer_score = best_node.p1
@@ -253,7 +253,8 @@ class Main:
                 
             else:
                 best_node = self.modified_tree.nodes[0]
-                
+            
+            print(best_node.id)
             self.best_node_id = best_node.id
             self.correct_string = best_node.string
             #saves string for the upcoming user move check
@@ -308,6 +309,10 @@ class Main:
             self.canvas.itemconfigure(self.user_score_text, text=self.user_score)
             self.move += 1
             
+            # Pārbauda, vai spēle ir beigusies -> beidz spēli
+            if (self.check_if_end_of_the_game()):
+                return messagebox.showinfo("End of game", "End of game!")
+            
             self.check_if_to_reconstruct_tree()
             
             # computer logic
@@ -327,29 +332,40 @@ class Main:
             self.canvas.itemconfigure(self.computer_score_text, text=self.computer_score)
             self.move += 1
             
+            if (self.check_if_end_of_the_game()):
+                return messagebox.showinfo("End of game", "End of game!")
             self.check_if_to_reconstruct_tree()
             
         else:
             return messagebox.showwarning("Warning", "Please prepare well")  
         
     def check_valid_move(self, string):
+        print(self.best_node_id)
         possible_moves = self.modified_tree.edges.get(self.best_node_id)
-        
+        print([node.string for node in possible_moves])
+        valid_node = None
         for move in possible_moves:
+            print(move.string)
             if (move.string == string):
                 valid_node = move
                 break
-            
+        
         return valid_node
     
+    def check_if_end_of_the_game(self):
+        return (len(self.text.get("1.0", "end-1c")) == 1) 
+    
     def check_if_to_reconstruct_tree(self):
-        if (self.move % DEPTH == 0):
-            tree = GameTree.construct_tree(self.correct_string)
+        if ((self.move - 1) % (DEPTH - 1) == 0):
+            if (self.user_flag):
+                tree = GameTree.construct_tree(self.correct_string, self.user_score, self.computer_score)
+            else:
+                tree = GameTree.construct_tree(self.correct_string, self.computer_score, self.user_score)
         
             if (self.minimax_flag):
                 self.modified_tree = MinimaxSolver.minimax(tree)
             else:
-                self.modified_tree = AlphaBetaSolver.alpha_beta(tree)
+                self.modified_tree = AlphaBetaSolver(tree).alpha_beta()
         
             self.best_node_id = 'A1'
             
@@ -417,6 +433,7 @@ class Main:
         
         self.user_score = 0
         self.computer_score = 0
+        self.move = 1
     
     def add_to_path(self, file_name):
         return "./assets/" + file_name

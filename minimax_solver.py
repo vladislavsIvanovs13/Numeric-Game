@@ -19,7 +19,6 @@ class MinimaxSolver:
     def minimax(self):
         child_level = self.get_max_level() - 1
 
-        # max_level = len(self.nodes[0].string) % 2 == 0
         max_level = False
 
         for node in reversed(self.nodes):

@@ -81,7 +81,7 @@ class GameTree:
 
         level_new = current_node.level + 1
 
-        if (level_new == DEPTH):
+        if (level_new == DEPTH or len(string_new) == 1):
             heu_new = Evaluator.evaluate_node(p1_new, p2_new, step_type)
             node_new = Node(id_new, string_new, p1_new, p2_new, level_new, heu_new)
         else:
@@ -105,12 +105,12 @@ class GameTree:
             j -= 1
             game_tree.add_edge(current_node.id, game_tree.nodes[i])
 
-    def construct_tree(root_node):
+    def construct_tree(root_node, p1=0, p2=0):
         global j
         game_tree = Tree()
         generated_nodes = []
-        game_tree.add_node(Node('A1', root_node, 0, 0, 1))
-        generated_nodes.append(Node('A1', root_node, 0, 0, 1))
+        game_tree.add_node(Node('A1', root_node, p1, p2, 1))
+        generated_nodes.append(Node('A1', root_node, p1, p2, 1))
 
         j = 2
         while (len(generated_nodes) > 0) and (generated_nodes[0].level < DEPTH):
@@ -122,11 +122,11 @@ class GameTree:
             GameTree.check_step(MOVE_TWO, generated_nodes, current_node, ptr, game_tree)
             generated_nodes.pop(0)
 
-        # for x in game_tree.nodes:
-        #     print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
+        for x in game_tree.nodes:
+            print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
 
-        # for x, y in game_tree.edges.items():
-        #     print(x, y)
+        for x, y in game_tree.edges.items():
+            print(x, [node.id for node in y])
 
         return game_tree
 
