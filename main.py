@@ -282,12 +282,24 @@ class Main:
             valid_node.id = 'A1'
         
         children_nodes = self.modified_tree.edges.get(valid_node.id)  
-        best_heu = valid_node.heu
-        
-        best_children = []
+         
+        # veido vārdnīcu, kas kā atslēgu glabā nākamā gājiena
+        # virsotņu heiristiskos vērtējumus, bet kā vērtību - sarakstu
+        # ar šim vērtējumam atbilstošām virsotnēm
+        heuristic_values = dict()
         for children_node in children_nodes:
-            if (children_node.heu == best_heu):
-                best_children.append(children_node)
+            if not (children_node.heu in heuristic_values):
+                heuristic_values[children_node.heu] = [children_node]
+            else:
+                heuristic_values[children_node.heu] = heuristic_values[children_node.heu] + [children_node]
+        
+        # atkarībā no pirmā spēlētāja izvēlas labāko heiristisko vērtējumu
+        if (self.user_flag):
+            heuristic_value = min(heuristic_values.keys())
+        else:
+            heuristic_value = max(heuristic_values.keys())
+        
+        best_children = heuristic_values[heuristic_value]
         
         # nejauši izvēlas vienu no labākiem vienādiem
         # heiristiskajiem vērtējumiem, lai spēle turpinātos interesantāk
