@@ -1,7 +1,9 @@
 class MinimaxSolver:
     def __init__(self, tree):
         self.tree = tree
-        
+
+    # metode meklē maksimālo heiristisko novērtējumu no virsotņu saraksta
+    # return -> maksimālo heiristisko novērtējumu
     def get_max_heu(self, nodes):
         max_heu = float('-inf')
         for node in nodes:
@@ -9,6 +11,8 @@ class MinimaxSolver:
                 max_heu = node.heu
         return max_heu
 
+    # metode meklē minimālo heiristisko novērtējumu no virsotņu saraksta
+    # return -> minimālo heiristisko novērtējumu
     def get_min_heu(self, nodes):
         min_heu = float('inf')
         for node in nodes:
@@ -16,6 +20,9 @@ class MinimaxSolver:
                 min_heu = node.heu
         return min_heu
 
+    # koka DEPTH (dziļums) = 5
+    # metode sāk meklēt bērnus virsotnēm priekšpēdējā līmenī (4), salīdzina vērtības un piešķir vecākam heiristisku vērtējumu atbilstoši līmenim (max/min)
+    # return -> spēles koks ar heiristiskiem novērtējumiem
     def minimax(self):
         child_level = self.get_max_level() - 1
 
