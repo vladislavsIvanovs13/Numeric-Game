@@ -36,12 +36,6 @@ class Tree:
     def get_max_level(self):
         return self.nodes[len(self.nodes) - 1].level
 
-    # get the node from ID
-    # def get_node(self, id):
-    #     for node in reversed(self.nodes):
-    #         if node.id == id:
-    #             return node
-
 # Spēles koka klase 
 class GameTree:
     def check_step(step_type, generated_nodes, current_node, ptr, game_tree):
@@ -131,22 +125,8 @@ class GameTree:
 
         # for x in game_tree.nodes:
         #     print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
-            
-        # print(game_tree.nodes[0].id, game_tree.nodes[0].string)
 
         # for x, y in game_tree.edges.items():
         #     print(x, [node.id for node in y])
 
         return game_tree
-
-
-# GameTree.construct_tree('16324')
-# 16324 should be replaced with the generated string
-# from string_generator class
-
-# if __name__ == "__main__":
-#     tree = GameTree.construct_tree('52163')
-#     # newTree = AlphaBeta(tree, DEPTH).alphabeta()
-
-#     for x in newTree.nodes:
-#         print(x.id, x.string, x.p1, x.p2, x.level, "heu = " ,x.heu)

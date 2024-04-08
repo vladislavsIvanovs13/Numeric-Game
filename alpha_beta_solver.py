@@ -1,4 +1,6 @@
-# Pseudocode: https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning/
+# Balstīts uz pseidokoda:
+# https://www.geeksforgeeks.org/minimax-algorithm-in-game-theory-set-4-alpha-beta-pruning/
+
 from game_tree import DEPTH
 
 class AlphaBetaSolver:
@@ -14,8 +16,10 @@ class AlphaBetaSolver:
             return True
 
     # rekursīva metode
-    # Metode iet no saknes, izaicinot sevi, līdz sasniedz pēdējo koka līmeni, katru reizi mainot iestatījumus max/min.
-    # Tālāk, salīdzinot bērnus, metode piešķir vecākam heiristisku novērtējumu.
+    # Metode iet no saknes, izsaucot sevi, līdz sasniedz pēdējo koka līmeni,
+    # katru reizi mainot iestatījumus max/min.
+    # Tālāk, salīdzinot bērnus, metode piešķir vecākam
+    # heiristisku novērtējumu.
     def calculate_heu(self, node, depth, alpha, beta, max_level):
         if (depth == DEPTH or AlphaBetaSolver.no_children(self,node)):
             return node.heu
@@ -29,7 +33,7 @@ class AlphaBetaSolver:
                 node.heu = max(heu_array)
                 best_heu = max(best_heu, node.heu)
                 alpha = max(alpha, best_heu)
-                # cut off the unnecessary node
+                # nogriezt nevajadzīgo zaru
                 if (beta <= alpha):
                     break
             return best_heu
@@ -42,13 +46,15 @@ class AlphaBetaSolver:
                 node.heu = min(heu_array)
                 best_heu = min(best_heu, node.heu)
                 beta = min(beta, best_heu)
-                # cut off the unnecessary node
+                # nogriezt nevajadzīgo zaru
                 if (beta <= alpha):
                     break
             return best_heu
 
-    # medote izsauc rekursīvu metodi calculate_heu, ar sākuma parametriem
-    # metode ir veidota, lai pamatklasē ar pašu spēli, izmantojot Alfa-beta algoritmu, nebūtu jādomā par sākuma parametriem un nebūtu iespējams pieļaut kļūdu
+    # metode izsauc rekursīvu metodi calculate_heu, ar sākuma parametriem
+    # metode ir veidota, lai pamatklasē ar pašu spēli,
+    # izmantojot Alfa-beta algoritmu, nebūtu jādomā par
+    # sākuma parametriem un nebūtu iespējams pieļaut kļūdu
     # return -> spēles koks ar heiristiskiem novērtējumiem
     def alpha_beta(self):
         AlphaBetaSolver.calculate_heu(self, self.tree.nodes[0], 1, float('-inf'), float('inf'), True)

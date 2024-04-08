@@ -40,6 +40,7 @@ class MinimaxSolver:
                 else:
                     node.heu = MinimaxSolver.get_min_heu(self, children_nodes)
 
-        for x in self.nodes:
-            print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
+        # for x in self.nodes:
+        #     print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
+        
         return self

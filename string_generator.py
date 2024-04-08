@@ -5,6 +5,7 @@ MAX_STRING_LENGTH = 25
 MIN_NUMBER = 1
 MAX_NUMBER = 6
 
+# Virknes ģeneratora klase, kas atbild par virknes ģenerēšanu spēles sākumā
 class Generator():
     def generate_string():
         string_length = random.randint(MIN_STRING_LENGTH, MAX_STRING_LENGTH)

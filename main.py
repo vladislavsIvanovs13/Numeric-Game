@@ -1,5 +1,5 @@
-#Izmantotie resursi:
-#https://stackoverflow.com/questions/38539617/tkinter-check-if-text-widget-is-empty
+# Izmantotie resursi:
+# https://stackoverflow.com/questions/38539617/tkinter-check-if-text-widget-is-empty
 
 import random
 from tkinter import *
@@ -263,7 +263,6 @@ class Main:
                 best_node = self.modified_tree.nodes[0]
             
             # saglabā virkni turpmākai spēlētāja gājiena pārbaudei
-            print(best_node.id)
             self.best_node_id = best_node.id
             self.correct_string = best_node.string
             
@@ -275,8 +274,6 @@ class Main:
         # saknes gadījumā
         if (valid_node == None):
             valid_node = self.modified_tree.nodes[0]
-        
-        print(valid_node.id)
         
         if ((self.move - 1) % (DEPTH - 1) == 0):
             valid_node.id = 'A1'
@@ -374,12 +371,10 @@ class Main:
     
     # pārbauda lietotāja ievadīto virkni
     def check_valid_move(self, string):
-        print(self.best_node_id)
         possible_moves = self.modified_tree.edges.get(self.best_node_id)
-        print([node.string for node in possible_moves])
+
         valid_node = None
         for move in possible_moves:
-            print(move.string)
             if (move.string == string):
                 valid_node = move
                 break
