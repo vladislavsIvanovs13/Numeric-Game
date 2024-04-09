@@ -1,4 +1,4 @@
-#Balstīts uz studiju kursa materiāliem:
+# Balstīts uz studiju kursa materiāliem:
 # https://estudijas.rtu.lv/mod/resource/view.php?id=4161716
 
 from node_evaluator import Evaluator
@@ -122,11 +122,5 @@ class GameTree:
                 ptr += PAIR_LENGTH
             GameTree.check_step(MOVE_TWO, generated_nodes, current_node, ptr, game_tree)
             generated_nodes.pop(0)
-
-        # for x in game_tree.nodes:
-        #     print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
-
-        # for x, y in game_tree.edges.items():
-        #     print(x, [node.id for node in y])
 
         return game_tree

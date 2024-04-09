@@ -1,6 +1,15 @@
 # Izmantotie resursi:
 # https://stackoverflow.com/questions/38539617/tkinter-check-if-text-widget-is-empty
 
+# Grafiskās saskarnes elementu izveidei (mapes assets saturs):
+# https://www.figma.com/
+
+# TKinter pamācības un rīki:
+# https://docs.python.org/3/library/tkinter.html
+# https://www.youtube.com/watch?v=eaxPK9VIkFM
+# https://www.pythonguis.com/tutorials/create-buttons-in-tkinter/
+# https://visualtk.com/
+
 import random
 from tkinter import *
 from tkinter import Canvas, Button, PhotoImage
@@ -275,6 +284,7 @@ class Main:
         if (valid_node == None):
             valid_node = self.modified_tree.nodes[0]
         
+        # piešķir jaunā koka saknei sākuma identifikatoru
         if ((self.move - 1) % (DEPTH - 1) == 0):
             valid_node.id = 'A1'
         

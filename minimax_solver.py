@@ -24,7 +24,9 @@ class MinimaxSolver:
         return min_heu
 
     # koka DEPTH (dziļums) = 5
-    # metode sāk meklēt bērnus virsotnēm priekšpēdējā līmenī (4), salīdzina vērtības un piešķir vecākam heiristisku vērtējumu atbilstoši līmenim (max/min)
+    # metode sāk meklēt bērnus virsotnēm priekšpēdējā līmenī (4),
+    # salīdzina vērtības un piešķir vecākam
+    # heiristisku vērtējumu atbilstoši līmenim (max/min)
     # return -> spēles koks ar heiristiskiem novērtējumiem
     def minimax(self):
         child_level = self.get_max_level() - 1
@@ -42,8 +44,5 @@ class MinimaxSolver:
                     node.heu = MinimaxSolver.get_max_heu(self, children_nodes)
                 else:
                     node.heu = MinimaxSolver.get_min_heu(self, children_nodes)
-
-        # for x in self.nodes:
-        #     print(x.id, x.string, x.p1, x.p2, x.level, x.heu)
         
         return self
