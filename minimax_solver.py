@@ -1,3 +1,6 @@
+# Minimaksa algoritms balstās uz galveno principu:
+# https://www.youtube.com/watch?v=GtPXxl2QjKU
+
 class MinimaxSolver:
     def __init__(self, tree):
         self.tree = tree
